@@ -30,14 +30,11 @@ class CustomHeader extends StatelessWidget {
 
         Row(
           children: [
-            // Language toggle button
             IconButton(
               icon: Icon(Icons.language, color: AppColor.primaryButtonColor),
               tooltip: tr('Change Language'),
               onPressed: () => _toggleLanguage(context),
             ),
-
-            // Logout button
             IconButton(
               onPressed: () {
                 Navigator.pushReplacement(
