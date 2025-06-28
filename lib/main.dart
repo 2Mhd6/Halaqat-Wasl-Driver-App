@@ -1,19 +1,23 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:halaqat_wasl_driver_app/shared/set_up.dart';
-import 'package:halaqat_wasl_driver_app/theme/app_text_style.dart';
 import 'package:halaqat_wasl_driver_app/theme/app_theme.dart';
-
-
+import 'package:halaqat_wasl_driver_app/ui/login/login_screen.dart';
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  
   await dotenv.load(fileName: '.env');
-
+  await EasyLocalization.ensureInitialized();
   await SetupSupabase.setUpSupabase();
 
-  runApp(MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('ar')],
+      path: 'assets/translation',
+      fallbackLocale: Locale('en'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,12 +27,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
       theme: AppTheme.theme,
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello there,' ,style: AppTextStyle.sfProBold36),
-        ),
-      ),
+      home: LogInScreen(),
     );
   }
 }

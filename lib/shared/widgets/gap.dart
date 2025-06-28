@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class Gap {
   // Height gaps
   static const gapH8 = SizedBox(height: 8);
+    static const gapH4 = SizedBox(height: 4);
   static const gapH16 = SizedBox(height: 16);
+   static const gapH20 = SizedBox(height: 20);
   static const gapH24 = SizedBox(height: 24);
   static const gapH32 = SizedBox(height: 32);
   static const gapH40 = SizedBox(height: 40);
@@ -22,7 +24,9 @@ class Gap {
   static const gapH144 = SizedBox(height: 144);
   static const gapH152 = SizedBox(height: 152);
   static const gapH160 = SizedBox(height: 160);
-
+  static const gapH180 = SizedBox(height: 180);
+  static const gapH200 = SizedBox(height: 200);
+   static const gapH250 = SizedBox(height: 250);
   // Width gaps
   static const gapW8 = SizedBox(width: 8);
   static const gapW16 = SizedBox(width: 16);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTextStyle {
-
   static const sfProBold36 = TextStyle(
     fontFamily: 'SFPro',
     fontWeight: FontWeight.bold,
