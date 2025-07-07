@@ -8,17 +8,21 @@ class CustomEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _ = context.locale; 
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment:
+            MainAxisAlignment.center, // center content vertically
         children: [
+          // Message text
           Text(
-            'dashboard.no_ride'.tr(),
+            'driver_screen.no_ride'.tr(), // localized empty state message
             textAlign: TextAlign.center,
             style: AppTextStyle.sfProW40016,
           ),
-          Gap.gapH16,
-          Image.asset('assets/car.png', height: 47.09, width: 118.34),
+          Gap.gapH16, // vertical spacing
+          // Image icon
+          Image.asset('assets/image/car.png', height: 47.09, width: 118.34),
         ],
       ),
     );

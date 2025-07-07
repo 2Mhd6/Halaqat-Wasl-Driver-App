@@ -2,10 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:halaqat_wasl_driver_app/extensions/screen_size.dart';
+import 'package:halaqat_wasl_driver_app/repo/authentication/authentication.dart';
 import 'package:halaqat_wasl_driver_app/shared/widgets/gap.dart';
 import 'package:halaqat_wasl_driver_app/theme/app_color.dart';
 import 'package:halaqat_wasl_driver_app/theme/app_text_style.dart';
-import 'package:halaqat_wasl_driver_app/ui/driver_dashboard/driver_dashboard_screen.dart';
+import 'package:halaqat_wasl_driver_app/ui/driver/driver_screen.dart';
 import 'package:halaqat_wasl_driver_app/ui/login/bloc/login_bloc.dart';
 import 'package:halaqat_wasl_driver_app/ui/login/bloc/login_event.dart';
 import 'package:halaqat_wasl_driver_app/ui/login/bloc/login_state.dart';
@@ -18,24 +19,26 @@ class LogInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailFocus = FocusNode();
+    final passwordFocus = FocusNode();
     return BlocProvider(
-      create: (_) => LoginBloc(),
+      create: (_) => LoginBloc(Authentication()),
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.message != null) {
             CustomSnackBar.show(
+              // show feedback
               context: context,
               message: state.message!,
               isSuccess: state.success,
             );
-
             if (state.success) {
-              Future.delayed(const Duration(seconds: 3), () {
+              Future.delayed(const Duration(seconds: 2), () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const DriverDashboardScreen(),
-                  ),
+                    builder: (_) => const DriverScreen(),
+                  ), // navigate on success
                 );
               });
             }
@@ -51,10 +54,10 @@ class LogInScreen extends StatelessWidget {
                   children: [
                     Gap.gapH32,
                     Image.asset(
-                      'assets/logo-halaqat-wasl.png',
+                      'assets/image/logo-halaqat-wasl.png',
                       height: 70,
                       width: 150,
-                    ),
+                    ), // logo
                     Gap.gapH24,
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -73,18 +76,20 @@ class LogInScreen extends StatelessWidget {
                           Text(
                             tr('log_in_screen.login'),
                             style: AppTextStyle.sfProBold36,
-                          ),
+                          ), // title
                           Gap.gapH24,
                           Form(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomTextField(
+                                  focusNode: emailFocus,
                                   label: tr('log_in_screen.email'),
                                   controller: bloc.emailController,
                                 ),
                                 Gap.gapH16,
                                 CustomTextField(
+                                  focusNode: passwordFocus,
                                   label: tr('log_in_screen.password'),
                                   controller: bloc.passwordController,
                                   isPassword: true,
@@ -92,29 +97,19 @@ class LogInScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Gap.gapH16,
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () {},
-                              child: Text(
-                                tr('log_in_screen.forget_password'),
-                                style: AppTextStyle.sfProW60014.copyWith(
-                                  color: AppColor.primaryButtonColor,
-                                ),
-                              ),
-                            ),
-                          ),
                           Gap.gapH250,
                           CustomButton(
                             label: tr('log_in_screen.log_in'),
                             width: context.getWidth(),
                             height: context.getHeight(multiplied: 0.055),
-                            onPressed: () => bloc.add(LoginSubmitted()),
+                            onPressed: () => context.read<LoginBloc>().add(
+                                    LoginSubmitted(),
+                                  ),
                             color: AppColor.primaryButtonColor,
                             textColor: AppColor.textWhite,
+                            isLoading: state.loading,
                           ),
-                          Gap.gapH56,
+                          Gap.gapH24,
                         ],
                       ),
                     ),

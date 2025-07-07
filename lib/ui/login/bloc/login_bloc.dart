@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:halaqat_wasl_driver_app/ui/login/bloc/login_event.dart';
-import 'package:halaqat_wasl_driver_app/ui/login/bloc/login_state.dart';
+import 'package:halaqat_wasl_driver_app/repo/authentication/authentication.dart';
+import 'login_event.dart';
+import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final Authentication _loginRepository;
 
-  LoginBloc() : super(LoginState.initial()) {
+  LoginBloc(this._loginRepository) : super(LoginState.initial()) {
     on<EmailChanged>((event, emit) {
       final isValid = _isValidEmail(event.value);
       emit(
@@ -34,9 +36,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginSubmitted>(_onLogin);
   }
 
-  void _onLogin(LoginSubmitted event, Emitter<LoginState> emit) async {
+  Future<void> _onLogin(LoginSubmitted event, Emitter<LoginState> emit) async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+
     final isEmailOk = _isValidEmail(email);
     final isPasswordOk = _isValidPassword(password);
 
@@ -56,17 +59,43 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     emit(state.copyWith(loading: true, message: null));
 
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final (user, driver) = await _loginRepository.loginWithEmailAndPassword(
+        email,
+        password,
+      );
 
-    if (password == "123456") {
+      if (user == null) {
+        emit(
+          state.copyWith(
+            loading: false,
+            message: "log_in_screen.invalid_credentials".tr(),
+            success: false,
+          ),
+        );
+        return;
+      }
+
+      if (driver == null) {
+        emit(
+          state.copyWith(
+            loading: false,
+            message: "log_in_screen.driver_not_found".tr(),
+            success: false,
+          ),
+        );
+        return;
+      }
+
       emit(
         state.copyWith(
-          loading: false,
-          message: "log_in_screen.login_success".tr(),
+          loading: true,
           success: true,
+          message: "log_in_screen.login_success".tr(),
+          driver: driver,
         ),
       );
-    } else {
+    } catch (_) {
       emit(
         state.copyWith(
           loading: false,
@@ -79,13 +108,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   bool _isValidEmail(String email) =>
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-
   bool _isValidPassword(String password) => password.length >= 6;
-
-  @override
-  Future<void> close() {
-    emailController.dispose();
-    passwordController.dispose();
-    return super.close();
-  }
 }

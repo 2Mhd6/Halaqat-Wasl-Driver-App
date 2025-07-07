@@ -3,12 +3,13 @@ import 'package:halaqat_wasl_driver_app/theme/app_color.dart';
 import 'package:halaqat_wasl_driver_app/theme/app_text_style.dart';
 
 class CustomButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-  final double width;
-  final double height;
-  final Color color;
-  final Color textColor;
+  final String label; // button text
+  final VoidCallback? onPressed; // tap callback
+  final double width; // button width
+  final double height; // button height
+  final Color color; // background color
+  final Color textColor; // text color
+  final bool isLoading; // new param to show loading spinner
 
   const CustomButton({
     super.key,
@@ -18,13 +19,14 @@ class CustomButton extends StatelessWidget {
     required this.height,
     this.color = AppColor.primaryButtonColor,
     this.textColor = AppColor.textWhite,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 379.25,
-      height: 49.54,
+      width: width,
+      height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
@@ -32,11 +34,20 @@ class CustomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: AppTextStyle.sfProBold20.copyWith(color: textColor),
-        ),
+        onPressed: isLoading ? null : onPressed,
+        child: isLoading
+            ? SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(textColor),
+                ),
+              )
+            : Text(
+                label,
+                style: AppTextStyle.sfProBold20.copyWith(color: textColor),
+              ),
       ),
     );
   }

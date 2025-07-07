@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:halaqat_wasl_driver_app/theme/app_color.dart';
 import 'package:halaqat_wasl_driver_app/theme/app_text_style.dart';
-
 class CustomCompleteButton extends StatelessWidget {
-  final bool isCompleted;
+  final bool isCompleted; 
+  final bool isStarted;
   final VoidCallback onComplete;
+  final VoidCallback onStart;
 
   const CustomCompleteButton({
     super.key,
     required this.isCompleted,
+    required this.isStarted,
     required this.onComplete,
+    required this.onStart,
   });
 
   @override
@@ -28,9 +31,9 @@ class CustomCompleteButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: ElevatedButton(
-        onPressed: onComplete,
+        onPressed: isStarted ? onComplete : onStart,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isCompleted
+          backgroundColor: isStarted
               ? AppColor.completedButtonColor
               : AppColor.primaryButtonColor,
           padding: const EdgeInsets.symmetric(vertical: 14),
@@ -40,7 +43,9 @@ class CustomCompleteButton extends StatelessWidget {
           elevation: 0,
         ),
         child: Text(
-          isCompleted ? 'dashboard.complete_trip'.tr() : 'dashboard.start_ride'.tr(),
+          isStarted
+              ? 'driver_screen.complete_trip'.tr()
+              : 'driver_screen.start_ride'.tr(),
           style: AppTextStyle.sfProBold16.copyWith(color: AppColor.textWhite),
         ),
       ),
