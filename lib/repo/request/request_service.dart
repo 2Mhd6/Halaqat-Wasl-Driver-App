@@ -8,7 +8,6 @@ class RequestService {
   final SupabaseClient _client;
 
   RequestService(this._client);
-
   // Fetch active requests assigned to a driver (excluding completed/canceled)
   Future<List<RequestModel>> getDriverRequests(String driverId) async {
     try {
@@ -40,7 +39,7 @@ class RequestService {
         .from('requests')
         .stream(primaryKey: ['request_id'])
         .eq('driver_id', driverId)
-        .order('request_date', ascending: false)
+        .order('request_date', ascending: true)
         .asyncMap((requests) async {
           try {
             final requestsList = (requests as List)
