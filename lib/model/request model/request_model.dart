@@ -3,6 +3,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:halaqat_wasl_driver_app/model/hospital%20model/hospital_model.dart';
 import 'package:halaqat_wasl_driver_app/model/user%20model/user_model.dart';
 part 'request_model.mapper.dart';
+
 @MappableClass()
 class RequestModel with RequestModelMappable {
   final String requestId;

@@ -5,7 +5,7 @@ class DriverState {
   final bool isLoading;
   final bool isRefreshing;
   final int? selectedIndex;
-  final int? startedIndex; // ✅ NEW: index of started ride
+  final int? startedIndex; 
   final Set<int> completedRides;
   final DriverModel? driver;
   final List<RequestModel> requests;
@@ -16,7 +16,7 @@ class DriverState {
     this.isLoading = false,
     this.isRefreshing = false,
     this.selectedIndex,
-    this.startedIndex, // ✅ added in constructor
+    this.startedIndex, 
     this.completedRides = const {},
     this.driver,
     this.requests = const [],
@@ -32,7 +32,7 @@ class DriverState {
     bool? isLoading,
     bool? isRefreshing,
     int? selectedIndex,
-    int? startedIndex, // ✅ added in copyWith
+    int? startedIndex, 
     Set<int>? completedRides,
     DriverModel? driver,
     List<RequestModel>? requests,
@@ -43,7 +43,7 @@ class DriverState {
       isLoading: isLoading ?? this.isLoading,
       isRefreshing: isRefreshing ?? this.isRefreshing,
       selectedIndex: selectedIndex ?? this.selectedIndex,
-      startedIndex: startedIndex ?? this.startedIndex, // ✅ added here
+      startedIndex: startedIndex ?? this.startedIndex, 
       completedRides: completedRides ?? this.completedRides,
       driver: driver ?? this.driver,
       requests: requests ?? this.requests,
@@ -60,7 +60,7 @@ class DriverState {
         other.isLoading == isLoading &&
         other.isRefreshing == isRefreshing &&
         other.selectedIndex == selectedIndex &&
-        other.startedIndex == startedIndex && // ✅ equality check
+        other.startedIndex == startedIndex &&
         other.completedRides == completedRides &&
         other.driver == driver &&
         other.requests == requests &&

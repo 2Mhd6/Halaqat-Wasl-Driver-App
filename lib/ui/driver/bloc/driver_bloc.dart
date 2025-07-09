@@ -10,7 +10,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> {
   final Authentication authentication;
   final RequestService requestService;
 
-  StreamSubscription<List<RequestModel>>? _requestStreamSub;
+  StreamSubscription<List<RequestModel>>? requestStream;
 
   DriverBloc({required this.authentication, required this.requestService})
     : super(const DriverState()) {
@@ -33,10 +33,10 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> {
       emit(state.copyWith(isLoading: false, driver: driver));
 
       //  Cancel previous stream if any
-      await _requestStreamSub?.cancel();
+      await requestStream?.cancel();
 
       //  Subscribe to live request updates
-      _requestStreamSub = requestService
+      requestStream = requestService
           .streamDriverRequests(driver.driverId)
           .listen((requests) {
             add(DriverRequestsUpdated(requests));
@@ -45,7 +45,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> {
       emit(
         state.copyWith(
           isLoading: false,
-          errorMessage: 'Failed to load rides: ${e.toString()}',
+          errorMessage: 'Failed to load rides',
         ),
       );
     }
@@ -83,7 +83,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> {
       emit(state.copyWith(requests: updatedRequests));
     } catch (e) {
       emit(
-        state.copyWith(errorMessage: 'Failed to start ride: ${e.toString()}'),
+        state.copyWith(errorMessage: 'Failed to start ride'),
       );
     }
   }
@@ -98,12 +98,11 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> {
       final request = state.requests[event.index];
       await requestService.markRequestCompleted(request.requestId);
 
-      
-      emit(state); // emit to keep state stable
+      emit(state);
     } catch (e) {
       emit(
         state.copyWith(
-          errorMessage: 'Failed to complete ride: ${e.toString()}',
+          errorMessage: 'Failed to complete ride',
         ),
       );
     }
@@ -119,7 +118,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> {
 
   @override
   Future<void> close() {
-    _requestStreamSub?.cancel();
+    requestStream?.cancel();
     return super.close();
   }
 }

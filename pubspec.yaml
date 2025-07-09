@@ -42,6 +42,7 @@ dependencies:
   equatable: ^2.0.5   
   get_it: ^7.6.0       
   dartz: ^0.10.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -49,6 +50,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  image_path: "assets/image/logo.png"
+  android: true
+  ios: false
+  remove_alpha_ios: true
+  adaptive_icon_background: "#FFFFFF" 
+  android_adaptive_icon_foreground: "assets/image/logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

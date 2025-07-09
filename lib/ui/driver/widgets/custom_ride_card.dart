@@ -38,7 +38,7 @@ class CustomRideCard extends StatelessWidget {
     required this.date,
     required this.time,
     required this.name,
-    required this.phoneNumber, // <-- added
+    required this.phoneNumber, 
     required this.isActive,
     required this.isCompleted,
     required this.onComplete,
